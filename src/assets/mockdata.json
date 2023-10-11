@@ -1,0 +1,1223 @@
+[
+    {
+      "id": 1001,
+      "imageUrl": "https://thumbs.dreamstime.com/z/portrait-thumbs-up-business-man-studio-white-background-mock-up-face-support-happy-male-employee-portrait-266645782.jpg?w=768",
+      "name": "Ressie",
+      "lastName": "Kunze",
+      "email": "Ressie.Kunze@dummyapis.com",
+      "contactNumber": "4417395790",
+      "age": 55,
+      "dob": "02/12/1968",
+      "salary": 1.0,
+      "address": "Address1",
+      "job": "IT intern",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+     
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+    },
+    {
+      "id": 1002,
+      "imageUrl": "https://thumbs.dreamstime.com/z/businessman-portrait-serious-face-modern-office-mockup-professional-us-confidence-corporate-mock-up-worker-277763035.jpg?w=992",
+      "name": "Claire",
+      "lastName": "Gusikowski",
+      "email": "Claire.Gusikowski@dummyapis.com",
+      "contactNumber": "4696393625",
+      "age": 22,
+      "dob": "07/01/2001",
+      "salary": 2.0,
+      "address": "Address2",
+      "job": "Marketing intern",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1003,
+      "imageUrl": "https://thumbs.dreamstime.com/z/woman-isolated-face-portrait-banner-mock-up-copy-space-business-casual-style-girl-white-collar-hold-notepad-executive-265492390.jpg?w=992",
+      "name": "Clare",
+      "lastName": "Conn",
+      "email": "Clare.Conn@dummyapis.com",
+      "contactNumber": "4032496148",
+      "age": 78,
+      "dob": "23/07/1945",
+      "salary": 3.0,
+      "address": "Address3",
+      "job": "Accountant Leader",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1004,
+      "imageUrl": "https://thumbs.dreamstime.com/z/successful-employee-desk-successful-employee-desk-office-115200942.jpg?w=768",
+      "name": "Trycia",
+      "lastName": "Beatty",
+      "email": "Trycia.Beatty@dummyapis.com",
+      "contactNumber": "4202597440",
+      "age": 81,
+      "dob": "29/01/1942",
+      "salary": 4.0,
+      "address": "Address4",
+      "job": "Softeware Engineer",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1005,
+      "imageUrl": "https://thumbs.dreamstime.com/z/businesswoman-showing-mock-up-blank-tablet-pc-touchpad-copy-space-office-interior-background-confident-young-business-woman-238523674.jpg?w=992",
+      "name": "Alia",
+      "lastName": "Wolff",
+      "email": "Alia.Wolff@dummyapis.com",
+      "contactNumber": "4716494444",
+      "age": 63,
+      "dob": "15/09/1960",
+      "salary": 5.0,
+      "address": "Address5",
+      "job": "PO Director",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1006,
+      "imageUrl": "https://thumbs.dreamstime.com/z/middle-aged-businessman-showing-empty-white-mock-up-credit-card-copy-space-area-yellow-background-confident-business-man-247039386.jpg?w=576",
+      "name": "Clarabelle",
+      "lastName": "Kunde",
+      "email": "Clarabelle.Kunde@dummyapis.com",
+      "contactNumber": "4307195771",
+      "age": 58,
+      "dob": "03/11/1965",
+      "salary": 6.0,
+      "address": "Address6",
+      "job": "QC Leader",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1007,
+      "imageUrl": " https://thumbs.dreamstime.com/z/portrait-female-entrepreneur-holding-coffee-cup-working-mock-up-computer-portrait-female-entrepreneur-smiling-194017873.jpg?w=768",
+      "name": "Angelina",
+      "lastName": "Walsh",
+      "email": "Angelina.Walsh@dummyapis.com",
+      "contactNumber": "4936899320",
+      "age": 32,
+      "dob": "23/02/1991",
+      "salary": 7.0,
+      "address": "Address7",
+      "job": "Tester Leader",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1008,
+      "imageUrl": "https://thumbs.dreamstime.com/z/warehouse-manager-using-laptop-empty-mock-up-space-points-finger-christmas-sale-space-you-advertising-warehouse-286926602.jpg?w=992",
+      "name": "Daphne",
+      "lastName": "Brown",
+      "email": "Daphne.Brown@dummyapis.com",
+      "contactNumber": "4275296367",
+      "age": 30,
+      "dob": "19/10/1993",
+      "salary": 8.0,
+      "address": "Address8",
+      "job": "BA intern",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1009,
+      "imageUrl": "https://thumbs.dreamstime.com/z/young-architect-woman-engineer-designer-employee-white-s-wear-hardhat-hold-look-drawing-blueprints-isolated-green-282936672.jpg?w=992",
+      "name": "Henry",
+      "lastName": "Thompson",
+      "email": "Henry.Thompson@dummyapis.com",
+      "contactNumber": "4505495876",
+      "age": 38,
+      "dob": "23/10/1985",
+      "salary": 9.0,
+      "address": "Address9",
+      "job": "BE developer",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ]
+      ,
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    },
+    {
+      "id": 1010,
+      "imageUrl": "https://thumbs.dreamstime.com/z/businessman-mock-up-notepad-his-hands-red-background-191564538.jpg?w=2048",
+      "name": "Carolyn",
+      "lastName": "O'Connell",
+      "email": "Carolyn.O'Connell@dummyapis.com",
+      "contactNumber": "4389791915",
+      "age": 71,
+      "dob": "15/03/1952",
+      "salary": 10.0,
+      "address": "Address10",
+      "job": "IT intern",
+      "Department": "Office",
+      "location": "Las Vegas",
+      "supervisor": "Akioshioro Amo",
+      "workShip": "Morning",
+      "leave": [
+        {
+            "name": "vacation",
+            "hour": 12
+        },
+        {
+          "name": "sick",
+          "hour": 22
+
+        },
+        {
+          "name": "courses",
+          "hour": 98
+
+        },
+        {
+          "name": "other",
+          "hour": 32
+
+        }
+      ],
+      "skills": [
+        {
+          "name": "Skill 1",
+          "rating": 3
+        },
+        {
+          "name": "Skill 2",
+          "rating": 5
+        },
+        {
+          "name": "Skill 3",
+          "rating": 2
+        },
+        {
+          "name": "Skill 4",
+          "rating": 4
+        },
+        {
+          "name": "Skill 5",
+          "rating": 1
+        },
+        {
+          "name": "Skill 6",
+          "rating": 3
+        },
+        {
+          "name": "Skill 7",
+          "rating": 2
+        },
+        {
+          "name": "Skill 8",
+          "rating": 4
+        },
+        {
+          "name": "Skill 9",
+          "rating": 5
+        }
+      ],
+      "Education": [
+        {
+          "name": "UvA Economic and Bussiness",
+          "Specialization": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "The British school of Amsterdam",
+          "Specialization": "Basic",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Course": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        },
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Bussiness Assistant",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Training": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ],
+      "Log": [
+        {
+          "name": "Bussiness school of Amsterdam",
+          "Description": "Economic and Management",
+          "Date": "09/09/2003",
+          "Upload Document": ""
+        }
+      ]
+
+
+    }
+  ]
+  
