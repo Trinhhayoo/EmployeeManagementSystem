@@ -1,13 +1,29 @@
 import React from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
 import { useState } from "react";
-import { getDatabase, ref, onValue, get, child, set } from "firebase/database";
-import database from '../firebase';
+import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
+import { getStorage, uploadBytes } from "firebase/storage";
+import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/storage";
+
+import { database, storage } from '../firebase';
 const AddEmployee = () => {
     const dbRef = ref(database);
+    
 
     const leave = ["vacation", "sick", "courses", "other"];
     const skills = ["skill 1", "skill 2", "skill 3", "skill 4", "skill 5", "skill 6", "skill 7", "skill 8", "skill 9"];
+
+
+
+    // State to store uploaded file
+    const [file, setFile] = useState("");
+
+    // progress
+    const [percent, setPercent] = useState(0);
+    const handleImageChange = (event) => {
+        setFile(event.target.files[0]);
+    }
+
 
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
@@ -23,6 +39,7 @@ const AddEmployee = () => {
     const [workShift, setWorkshift] = useState("");
     const [leaveHour, setLeave] = useState([]);
     const [skillsHour, setSkill] = useState([]);
+    const [lastId, setLastId] = useState(1);
 
     const handleLeave = (leave, hour) => {
         const arrLeave = {
@@ -31,18 +48,12 @@ const AddEmployee = () => {
         }
         setLeave((prevLeaveHour) => [...prevLeaveHour, arrLeave]);
     };
-    const handleSkill = () => {
-        // Lấy danh sách tất cả các phần tử select
-        const selectElements = document.querySelectorAll("#skill-list select");
-
-        // Thêm sự kiện change cho từng phần tử select
-        selectElements.forEach((select, index) => {
-            select.addEventListener("change", function () {
-                const selectedValue = select.value;
-                const skillName = skills[index]; // Lấy tên kỹ năng tương ứng từ mảng skills
-                setSkill(...skillsHour, { "name": skillName, "hours": selectedValue });
-            });
-        });
+    const handleSkill = (skill, hour) => {
+        const arrSkill = {
+            "name": skill,
+            "hours": hour.target.value
+        }
+        setSkill((prevSkillHour) => [...prevSkillHour, arrSkill]);
 
     }
 
@@ -51,8 +62,7 @@ const AddEmployee = () => {
     const [courseField, setCourseField] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
     const [trainingField, setTraining] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
     const [logField, setLog] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
-    const [uploadAvatar, setAvatar] = useState(null);
-
+    const [selectedImage, setSelectedImage] = useState(null);
     const handleAddEducationField = () => {
         const newId = educationField.length + 1;
         setEducation([...educationField, { id: newId, value: "" }]);
@@ -66,13 +76,13 @@ const AddEmployee = () => {
         // setEducation(updatedFields);
         const { id } = event.target;
         const field = id.split("-")[0]; // Extract the field name from the id
-    
+
         const updatedEducationField = [...educationField];
         updatedEducationField[index] = {
             ...updatedEducationField[index],
             [field]: event.target.value,
         };
-    
+
         setEducation(updatedEducationField);
     };
     const handleAddCourseField = () => {
@@ -80,59 +90,73 @@ const AddEmployee = () => {
         setCourseField([...educationField, { id: newId, value: "" }]);
     };
 
-    const handleCourseChange = (id, newValue) => {
-        const updatedFields = courseField.map((field) =>
-            field.id === id ? { ...field, value: newValue } : field
-        );
-        setCourseField(updatedFields);
+    const handleCourseChange = (index, event) => {
+        const { id } = event.target;
+        const field = id.split("-")[0]; // Extract the field name from the id
+
+        const updatedEducationField = [...courseField];
+        updatedEducationField[index] = {
+            ...updatedEducationField[index],
+            [field]: event.target.value,
+        };
+
+        setCourseField(updatedEducationField);
     };
     const handleAddTrainingField = () => {
         const newId = trainingField.length + 1;
         setTraining([...educationField, { id: newId, value: "" }]);
     };
 
-    const handleTrainingChange = (id, newValue) => {
-        const updatedFields = trainingField.map((field) =>
-            field.id === id ? { ...field, value: newValue } : field
-        );
-        setTraining(updatedFields);
+    const handleTrainingChange = (index, event) => {
+        const { id } = event.target;
+        const field = id.split("-")[0]; // Extract the field name from the id
+
+        const updatedEducationField = [...trainingField];
+        updatedEducationField[index] = {
+            ...updatedEducationField[index],
+            [field]: event.target.value,
+        };
+
+        setTraining(updatedEducationField);
     };
     const handleAddLogField = () => {
         const newId = logField.length + 1;
         setLog([...educationField, { id: newId, value: "" }]);
     };
 
-    const handleLogChange = (id, newValue) => {
-        const updatedFields = logField.map((field) =>
-            field.id === id ? { ...field, value: newValue } : field
-        );
-        setLog(updatedFields);
-    };
+    const handleLogChange = (index, event) => {
+        const { id } = event.target;
+        const field = id.split("-")[0]; // Extract the field name from the id
 
-    const handleAvatar = (imageFile) => {
-
-        setAvatar(imageFile);
-        // Tạo một thẻ img để tải ảnh và chuyển thành dữ liệu
-        const img = new Image();
-        img.crossOrigin = 'Anonymous';
-        img.src = uploadAvatar;
-
-        img.onload = function () {
-            const canvas = document.createElement('canvas');
-            const context = canvas.getContext('2d');
-
-            canvas.width = img.width;
-            canvas.height = img.height;
-            context.drawImage(img, 0, 0, img.width, img.height);
-
-            const dataURL = canvas.toDataURL('image/jpeg');
-            setAvatar(dataURL);
-            // Bây giờ bạn có thể lưu trữ dataURL trong cơ sở dữ liệu
-            // Ví dụ: dataURL có thể gửi lên Firebase Realtime Database
-            // hoặc Firestore như một chuỗi.
+        const updatedEducationField = [...logField];
+        updatedEducationField[index] = {
+            ...updatedEducationField[index],
+            [field]: event.target.value,
         };
 
+        setLog(updatedEducationField);
     };
+
+
+
+
+
+    // const handleImageChange = (e) => {
+    //     const file = e.target.files[0];
+    //     if (file) {
+    //         const reader = new FileReader();
+    //         reader.onload = (e) => {
+    //             const imageBlob = new Blob([e.target.result], { type: file.type });
+    //             setSelectedImage(URL.createObjectURL(imageBlob));
+    //             // You can use the 'imageBlob' for further processing or uploading.
+    //         };
+    //         reader.readAsArrayBuffer(file);
+    //     }
+    // };
+
+
+
+
     const updateEducationData = (index) => {
         const newEducation = {};
         const name = document.getElementById(`name-${index}`).value;
@@ -201,12 +225,23 @@ const AddEmployee = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
+        get(child(dbRef, `lastKey`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                var temp = snapshot.val();
+                setLastId(temp.lastId + 1);
+                debugger
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
 
 
         // Tạo đối tượng JSON dữ liệu theo định dạng bạn cung cấp
         const data = {
-            id: 1,
-            imageUrl: uploadAvatar,
+            id: lastId,
+
             name: name,
             lastName: lastName,
             email: email,
@@ -229,9 +264,42 @@ const AddEmployee = () => {
         debugger
 
 
+
         set(child(dbRef, `users/${data.id}`), {
             data
         });
+        update(child(dbRef, `lastKey`), {
+         lastId
+        });
+
+        
+debugger
+
+        const storageRef = sRef(storage, `/files/${data?.id}`);
+debugger
+        // progress can be paused and resumed. It also exposes progress updates.
+        // Receives the storage reference and the file to upload.
+        const uploadTask = uploadBytesResumable(storageRef, file);
+
+        uploadTask.on(
+            "state_changed",
+            (snapshot) => {
+                const percent = Math.round(
+                    (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                );
+
+                // update progress
+                setPercent(percent);
+            },
+            (err) => console.log(err),
+            () => {
+                // download url
+                getDownloadURL(uploadTask.snapshot.ref).then((url) => {
+                    console.log(url);
+                });
+            }
+        );
+
 
     }
     return (
@@ -351,7 +419,7 @@ const AddEmployee = () => {
                                 id="avatar"
                                 className="hidden"
                                 accept=".jpg, .jpeg, .png, .gif"
-                                onChange={(e) => handleAvatar(e.target.files[0])}
+                                onChange={(e) => handleImageChange(e)}
                             />
                             <label
                                 htmlFor="avatar"
@@ -384,7 +452,7 @@ const AddEmployee = () => {
 
                             <div class="relative">
                                 <p>{item}</p>
-                                <select class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                <select onChange={(e) => handleSkill(item, e)} class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -410,7 +478,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={(e) => handleEducationChange(index,e)}
+                                        onChange={(e) => handleEducationChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -418,7 +486,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={(e) => handleEducationChange(index,e)}
+                                        onChange={(e) => handleEducationChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -429,7 +497,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={(e) => handleEducationChange(index,e)}
+                                        onChange={(e) => handleEducationChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -438,7 +506,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={(e) => handleEducationChange(index,e)}
+                                        onChange={(e) => handleEducationChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -462,7 +530,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={() => handleCourseChange(index)}
+                                        onChange={(e) => handleCourseChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -470,7 +538,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={() => handleCourseChange(index)}
+                                        onChange={(e) => handleCourseChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`specialization-${index}`}>Specialization</label>
@@ -480,7 +548,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={() => handleCourseChange(index)}
+                                        onChange={(e) => handleCourseChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -489,7 +557,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={() => handleCourseChange(index)}
+                                        onChange={(e) => handleCourseChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -512,7 +580,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={() => handleTrainingChange(index)}
+                                        onChange={(e) => handleTrainingChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -520,7 +588,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={() => handleTrainingChange(index)}
+                                        onChange={(e) => handleTrainingChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`specialization-${index}`}>Specialization</label>
@@ -530,7 +598,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={() => handleTrainingChange(index)}
+                                        onChange={(e) => handleTrainingChange(index, e)}
 
 
                                         required />
@@ -540,7 +608,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={() => handleTrainingChange(index)}
+                                        onChange={(e) => handleTrainingChange(index, e)}
 
 
                                         required />
@@ -563,7 +631,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={() => handleLogChange(index)}
+                                        onChange={(e) => handleLogChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -571,7 +639,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={() => handleLogChange(index)}
+                                        onChange={(e) => handleLogChange(index, e)}
 
                                         required />
                                     <div className="underline"></div>
@@ -582,7 +650,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={() => handleLogChange(index)}
+                                        onChange={(e) => handleLogChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`date-${index}`}>Date</label>
@@ -590,7 +658,7 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={() => handleLogChange(index)}
+                                        onChange={(e) => handleLogChange(index, e)}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`uploadDocument-${index}`}>Upload Document</label>
