@@ -4,7 +4,7 @@ import { useState, useEffect } from "react";
 import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
 import { getStorage, uploadBytes } from "firebase/storage";
 import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/storage";
-import { database, storage } from '../firebase';
+import { database, storage } from '../firebaseStore/firebase';
 import { useParams } from "react-router-dom";
 const EditEmployee = () => {
     const dbRef = ref(database);

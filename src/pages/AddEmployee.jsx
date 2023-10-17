@@ -5,7 +5,7 @@ import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, qu
 import { getStorage, uploadBytes } from "firebase/storage";
 import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/storage";
 
-import { database, storage } from '../firebase';
+import { database, storage } from '../firebaseStore/firebase';
 const AddEmployee = () => {
     const dbRef = ref(database);
 

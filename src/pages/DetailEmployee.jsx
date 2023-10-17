@@ -9,7 +9,7 @@ import { FiEdit } from "react-icons/fi";
 import { useParams } from "react-router-dom";
 import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
 import { getStorage, uploadBytes } from "firebase/storage";
-import { database, storage } from '../firebase';
+import { database, storage } from '../firebaseStore/firebase';
 import { uploadBytesResumable, getMetadata, getDownloadURL, ref as sRef, listAll } from "firebase/storage";
 
 
