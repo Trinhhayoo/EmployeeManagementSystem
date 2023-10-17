@@ -25,7 +25,10 @@ import {
 import { setRegisterLogin } from "./redux/features/playerSlice";
 
 
+
 const App = () => {
+ 
+
   const dispatch = useDispatch();
   const user = JSON.parse(sessionStorage.getItem("user"));
   if (user) {
@@ -42,15 +45,7 @@ const App = () => {
 
 
  
-  // get(child(dbRef, `users`)).then((snapshot) => {
-  //   if (snapshot.exists()) {
-  //     console.log(snapshot.val());
-  //   } else {
-  //     console.log("No data available");
-  //   }
-  // }).catch((error) => {
-  //   console.error(error);
-  // });
+
   // set(child(dbRef, `users/2`), {
     
   //   id: 2,

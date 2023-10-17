@@ -1,6 +1,6 @@
 import React from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
-import { useState } from "react";
+import { useState , useEffect} from "react";
 import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
 import { getStorage, uploadBytes } from "firebase/storage";
 import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/storage";
@@ -8,7 +8,7 @@ import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/stor
 import { database, storage } from '../firebase';
 const AddEmployee = () => {
     const dbRef = ref(database);
-    
+
 
     const leave = ["vacation", "sick", "courses", "other"];
     const skills = ["skill 1", "skill 2", "skill 3", "skill 4", "skill 5", "skill 6", "skill 7", "skill 8", "skill 9"];
@@ -39,8 +39,21 @@ const AddEmployee = () => {
     const [workShift, setWorkshift] = useState("");
     const [leaveHour, setLeave] = useState([]);
     const [skillsHour, setSkill] = useState([]);
-    const [lastId, setLastId] = useState(1);
-
+    const [lastId, setLastId] = useState();
+    
+    useEffect(() => {
+        get(child(dbRef, `lastKey`)).then((snapshot) => {
+            if (snapshot.exists()) {
+                var temp = snapshot.val();
+                setLastId(temp.lastId + 1);
+                debugger
+            } else {
+                console.log("No data available");
+            }
+        }).catch((error) => {
+            console.error(error);
+        });
+      }, []);
     const handleLeave = (leave, hour) => {
         const arrLeave = {
             "name": leave,
@@ -225,23 +238,12 @@ const AddEmployee = () => {
 
     const handleSubmit = (event) => {
         event.preventDefault();
-        get(child(dbRef, `lastKey`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                var temp = snapshot.val();
-                setLastId(temp.lastId + 1);
-                debugger
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
-        });
+       
 
 
         // Tạo đối tượng JSON dữ liệu theo định dạng bạn cung cấp
         const data = {
             id: lastId,
-
             name: name,
             lastName: lastName,
             email: email,
@@ -261,8 +263,7 @@ const AddEmployee = () => {
             Training: trainingField,
             Log: logField
         };
-        debugger
-
+      
 
 
         set(child(dbRef, `users/${data.id}`), {
@@ -273,10 +274,10 @@ const AddEmployee = () => {
         });
 
         
-debugger
+
 
         const storageRef = sRef(storage, `/files/${data?.id}`);
-debugger
+
         // progress can be paused and resumed. It also exposes progress updates.
         // Receives the storage reference and the file to upload.
         const uploadTask = uploadBytesResumable(storageRef, file);
