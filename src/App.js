@@ -18,7 +18,8 @@ import {
   SignUp,
   HomePage,
   DetailEmployee,
-  AddEmployee
+  AddEmployee,
+  EditEmployee
   
 } from "./pages";
 
@@ -72,9 +73,8 @@ const App = () => {
               <Route path="/signin" element={<HomePage />} />
               <Route path="/signup" element={<HomePage />} />
               <Route path="/addEmployee" element={<AddEmployee />} />
-
-              <Route
-                path="/employee/:id" element={<DetailEmployee />} />
+              <Route path="/edit-employee/:id" element={<EditEmployee />} />
+              <Route path="/employee/:id" element={<DetailEmployee />} />
             </Routes>
           </div>
         

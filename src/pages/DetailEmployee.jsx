@@ -1,5 +1,6 @@
 // src/components/AboutPage.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { EmployeeBar } from '../components';
 import data from "../assets/mockdata.json";
 import {useState, useEffect} from 'react';
@@ -22,22 +23,24 @@ const DetailEmployee = () => {
 
 
 
-  const { id } = useParams();
-
+ 
+  const  {id}  = useParams();
   const [status, setStatus] = useState("top-charts");
   const [info, setInfor] = useState();
   const [imgEmployee, setImgEmployee] = useState();
+ // const [id, setID] =useState();
 
 
   useEffect(() => {
     // Thay đổi key khi component được mount lại hoặc focus
 
     setStatus("status-" + new Date().getTime());
+    
    
   }, []);
   useEffect(() => {
     const fetchImage = async (id) => {
-      const imageRef = ref(storage, `files/${id}`); // Tạo tham chiếu đến hình ảnh cụ thể
+      const imageRef = sRef(storage, `files/${id}`); // Tạo tham chiếu đến hình ảnh cụ thể
       const url = await getDownloadURL(imageRef); // Lấy URL tải xuống hình ảnh
       
       return url;
@@ -51,26 +54,26 @@ const DetailEmployee = () => {
     }
     
     loadImage();
-    }, [status]);
+    }, [status,id]);
   useEffect( () => {
     onValue(child(dbRef, `users/${parseInt(id, 10)}`), (snapshot) => {
-      const data = snapshot.val();
+      const data = snapshot.val().data;
       debugger
      setInfor(data);
     });
    
 
-  }, [status]);
+  }, [status,id]);
 
 
  // const e = data.find((item) => item.id === parseInt(id, 10));
-  const renderSkillRating = (rating) => {
+  const renderSkillRating = () => {
     return (
       <div className="grid grid-cols-3 grid-rows-3 gap-1 ">
 
         {info?.skills.map((skill, index) => (
           <div key={index} className="flex flex-row items-center py-0.5 gap-1">
-            {skill.name}: {renderRatingStars(skill.rating)}
+            {skill.name}: {renderRatingStars(parseInt(skill.hours,10))}
           </div>
         ))}
       </div>
@@ -136,7 +139,7 @@ const DetailEmployee = () => {
             <div key={index} className="flex flex-row bg-white rounded-lg">
               <div className="h-full w-1 bg-orange-500 rounded-lg overflow-hidden"></div>
               <div className=" flex flex-row p-3 items-center">
-                <p className='text-orange-500 mr-4 text-3xl'>{item.hour}</p>
+                <p className='text-orange-500 mr-4 text-3xl'>{item.hours}</p>
                 <p> hours of {item.name} leave</p>
               </div>
             </div>
@@ -148,7 +151,12 @@ const DetailEmployee = () => {
       </div>
       <div className='border-none bg-white bg-cover flex-col flex flex-grow px-4  '>
         <div className="flex justify-end mt-2 mr-4">
-          <FiEdit size={30} />
+           <Link  to={`/edit-employee/${info?.id}`}>
+           <FiEdit size={30} 
+           className="cursor-pointer"
+           />
+          </Link>
+         
         </div>
         <div className="border border-gray-300 h-[0.5px] w-full mt-4"></div>
 
@@ -226,11 +234,11 @@ const DetailEmployee = () => {
 
         </div>
         <div className='grid grid-cols-[1fr,1fr]'>
-          <div className="p-4">
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
             <fieldset className="border border-gray-300 p-4 rounded-lg">
               <legend className="text-lg font-semibold">Education</legend>
               {info?.Education?.map((item,index) => (
-                <div>
+                <div >
                   <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
                     <div className='flex flex-col'>
                       <p className=' text-gray-500 text-xs'>Name</p>
@@ -262,7 +270,7 @@ const DetailEmployee = () => {
               ))}
             </fieldset>
           </div>
-          <div className="p-4">
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
             <fieldset className="border border-gray-300 p-4 rounded-lg">
               <legend className="text-lg font-semibold">Courses</legend>
               {info?.Course?.map((item,index) => (
@@ -298,6 +306,82 @@ const DetailEmployee = () => {
               ))}
             </fieldset>
           </div>
+          
+        </div>
+        <div className='grid grid-cols-[1fr,1fr]'>
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
+            <fieldset className="border border-gray-300 p-4 rounded-lg">
+              <legend className="text-lg font-semibold">Log</legend>
+              {info?.Log?.map((item,index) => (
+                <div className=' overflow-y-scroll h-[calc(100vh-85vh)]  hide-scrollbar '>
+                  <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
+                    <div className='flex flex-col'>
+                      <p className=' text-gray-500 text-xs'>Name</p>
+                      <p className='text-sm'>{item.name}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Specialization</p>
+                      <p className='text-sm'>{item.Specialization}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Date</p>
+                      <p className='text-sm'>{item.Date}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Upload Document</p>
+                      <p className='text-sm'>{item['Upload Document']}</p>
+                    </div>
+
+
+                  </div>
+                  {index !== info?.Log?.length - 1 && (
+                  <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
+
+      )}
+                </div>
+
+
+
+              ))}
+            </fieldset>
+          </div>
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
+            <fieldset className="border border-gray-300 p-4 rounded-lg">
+              <legend className="text-lg font-semibold">Training</legend>
+              {info?.Training?.map((item,index) => (
+                <div>
+                  <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
+                    <div className='flex flex-col'>
+                      <p className=' text-gray-500 text-xs'>Name</p>
+                      <p className='text-sm'>{item.name}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Specialization</p>
+                      <p className='text-sm'>{item.Description}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Date</p>
+                      <p className='text-sm'>{item.Date}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Upload Document</p>
+                      <p className='text-sm'>{item['Upload Document']}</p>
+                    </div>
+
+
+                  </div>
+                  {index !== info?.Training?.length - 1 && (
+                  <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
+
+      )}
+                </div>
+
+
+
+              ))}
+            </fieldset>
+          </div>
+          
         </div>
       </div>
 
