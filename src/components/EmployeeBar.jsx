@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState,useEffect } from "react";
 import { NavLink } from "react-router-dom";
 import { HiOutlineMenu } from "react-icons/hi";
 import { RiCloseLine } from "react-icons/ri";
@@ -7,6 +7,10 @@ import { IoMdAdd } from "react-icons/io";
 import {BiSearch} from "react-icons/bi";
 import {BiDownArrow} from "react-icons/bi";
 import {AiOutlineClose} from "react-icons/ai";
+import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
+import { getStorage, uploadBytes } from "firebase/storage";
+import { uploadBytesResumable, getMetadata, getDownloadURL, ref as sRef, listAll } from "firebase/storage";
+import { database, storage } from '../firebaseStore/firebase';
 
 
 
@@ -15,8 +19,63 @@ import { logo } from "../assets";
 import data from "../assets/mockdata.json";
 
 const Employee = ({ handleClick }) => {
-  const [showModal, setShowModal] = useState(false)
- 
+  const dbRef = ref(database);
+  const [employees, setEmployees] = useState([]);
+  const [imgEmployee, setImgEmployee] = useState([]);
+  const [lastId,  setLastId] = useState();
+  const [showModal, setShowModal] = useState(false);
+  const [status, setStatus] = useState("top-charts");
+
+  useEffect(() => {
+    // Thay đổi key khi component được mount lại hoặc focus
+
+    setStatus("status-" + new Date().getTime());
+    get(child(dbRef, `lastKey`)).then((snapshot) => {
+      if (snapshot.exists()) {
+          var temp = snapshot.val();
+          setLastId(temp.lastId );
+         
+      } else {
+          console.log("No data available");
+      }
+  }).catch((error) => {
+      console.error(error);
+  });
+  }, []);
+  useEffect(() => {
+    const fetchImages = async () => {
+      const folderRef = sRef(storage, 'files'); // Tạo tham chiếu đến thư mục "files"
+      const result = await listAll(folderRef); // Sử dụng listAll để liệt kê tất cả các tệp trong thư mục
+    
+      const urlPromises = result.items.map(async (imageRef) => {
+        return await getDownloadURL(imageRef);
+      });
+    
+      return Promise.all(urlPromises);
+    }
+    
+    const loadImages = async () => {
+      const urls = await fetchImages();
+      setImgEmployee(urls);
+      
+    }
+    
+    loadImages();
+    }, [status]);
+  useEffect( () => {
+    get(child(dbRef, `users`)).then((snapshot) => {
+      if (snapshot.exists()) {
+        setEmployees(snapshot.val());
+      } else {
+        console.log("No data available");
+      }
+    }).catch((error) => {
+      console.error(error);
+    });
+    
+   
+
+  }, [status]);
 
   return (
 
@@ -35,17 +94,17 @@ const Employee = ({ handleClick }) => {
         ><IoMdAdd size="20" color="#fffff" />Add Employee</button>
       </div>
       <div className="border border-gray-400 h-[0.005px] w-full"></div>
-      {data.map((item) => {
+      {employees?.map((item,index) => {
         return (
           <NavLink
-            key={item.id}
-            to={`employee/:${item.id}`}
+            key={item.data.id}
+            to={`employee/${item.data.id}`}
             className="flex flex-row justify-start  my-8 text-xs font-medium gap-6  hover:text-gray-400 text-white "
           //  onClick={() => handleClick && handleClick()}
           >
             <img
-              src={item.imageUrl}
-              alt={item.name}
+              src={imgEmployee[index-1]}
+              alt={item.data.name}
               className="w-8 h-8  rounded-full object-cover"
             />
 
@@ -53,14 +112,14 @@ const Employee = ({ handleClick }) => {
 
               <div className="flex flex-row gap-2" >
                 <p>
-                  {item.name}
+                  {item.data.name}
                 </p>
-                <p>{item.lastName}</p>
+                <p>{item.data.lastName}</p>
               </div>
 
 
               <div className="text-gray-400">
-                {item.job}
+                {item.data.job}
               </div>
 
             </div>

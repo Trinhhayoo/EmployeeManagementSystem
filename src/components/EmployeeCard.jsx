@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 
 
-const EmployeeCard = ({employee }) => (
+const EmployeeCard = ({employee,imgEmployee}) => (
     <div className='w-full grid grid-cols-[0.5fr,3fr,2fr,2fr,2fr] items-center hover:bg-black-400/50 py-2 p-4 rounded-2xl cursor-pointer mb-2'>
       <h3 className='font-bold text-base text-100 mr-3'>
         {employee.id}
@@ -12,7 +12,7 @@ const EmployeeCard = ({employee }) => (
      
       <div className='flex flex-row  items-center  gap-6 '>
         <img 
-          src = {employee.imageUrl}
+          src = {imgEmployee}
           //{song?.images?.coverart} 
           alt={employee?.name} 
           className='w-20 h-20 hidden md:flex  rounded-2xl object-cover'

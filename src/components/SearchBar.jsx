@@ -7,6 +7,10 @@ import { useSelector } from "react-redux/es/hooks/useSelector";
 import { Button } from "@material-tailwind/react";
 import { useDispatch } from "react-redux";
 import { setLogout } from "../redux/features/playerSlice";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import provider from "../firebaseStore/auth_google_provider_scope";
+import { app } from "../firebaseStore/firebase";
+const auth = getAuth(app);
 
 const SearchBar = () => {
   const { username } = useSelector((state) => state.player);
@@ -20,7 +24,25 @@ const SearchBar = () => {
     navigate(`/search/${searchTerm}`);
   };
   const handleSignIn = () => {
-    navigate("/signin");
+    signInWithPopup(auth, provider)
+  .then((result) => {
+    // This gives you a Google Access Token. You can use it to access the Google API.
+    const credential = GoogleAuthProvider.credentialFromResult(result);
+    const token = credential.accessToken;
+    // The signed-in user info.
+    const user = result.user;
+    // IdP data available using getAdditionalUserInfo(result)
+    // ...
+  }).catch((error) => {
+    // Handle Errors here.
+    const errorCode = error.code;
+    const errorMessage = error.message;
+    // The email of the user's account used.
+    const email = error.customData.email;
+    // The AuthCredential type that was used.
+    const credential = GoogleAuthProvider.credentialFromError(error);
+    // ...
+  });
   };
   const handleSignUp = () => {
     navigate("/signup");

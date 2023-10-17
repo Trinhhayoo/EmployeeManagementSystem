@@ -27,6 +27,7 @@ const database = getDatabase(app);
 const storage = getStorage(app);
 
 export {
+  app,
   database,
   storage
 };

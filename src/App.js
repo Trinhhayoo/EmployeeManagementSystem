@@ -18,14 +18,18 @@ import {
   SignUp,
   HomePage,
   DetailEmployee,
-  AddEmployee
+  AddEmployee,
+  EditEmployee
   
 } from "./pages";
 
 import { setRegisterLogin } from "./redux/features/playerSlice";
 
 
+
 const App = () => {
+ 
+
   const dispatch = useDispatch();
   const user = JSON.parse(sessionStorage.getItem("user"));
   if (user) {
@@ -42,15 +46,7 @@ const App = () => {
 
 
  
-  // get(child(dbRef, `users`)).then((snapshot) => {
-  //   if (snapshot.exists()) {
-  //     console.log(snapshot.val());
-  //   } else {
-  //     console.log("No data available");
-  //   }
-  // }).catch((error) => {
-  //   console.error(error);
-  // });
+
   // set(child(dbRef, `users/2`), {
     
   //   id: 2,
@@ -77,9 +73,8 @@ const App = () => {
               <Route path="/signin" element={<HomePage />} />
               <Route path="/signup" element={<HomePage />} />
               <Route path="/addEmployee" element={<AddEmployee />} />
-
-              <Route
-                path="/employee/:id" element={<DetailEmployee />} />
+              <Route path="/edit-employee/:id" element={<EditEmployee />} />
+              <Route path="/employee/:id" element={<DetailEmployee />} />
             </Routes>
           </div>
         

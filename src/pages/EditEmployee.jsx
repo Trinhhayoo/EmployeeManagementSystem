@@ -1,30 +1,23 @@
 import React from "react";
 import { AiFillPlusCircle } from "react-icons/ai";
-import { useState , useEffect} from "react";
+import { useState, useEffect } from "react";
 import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
 import { getStorage, uploadBytes } from "firebase/storage";
 import { uploadBytesResumable, getDownloadURL, ref as sRef } from "firebase/storage";
-
 import { database, storage } from '../firebaseStore/firebase';
-const AddEmployee = () => {
+import { useParams } from "react-router-dom";
+const EditEmployee = () => {
     const dbRef = ref(database);
+
+
 
 
     const leave = ["vacation", "sick", "courses", "other"];
     const skills = ["skill 1", "skill 2", "skill 3", "skill 4", "skill 5", "skill 6", "skill 7", "skill 8", "skill 9"];
-
-
-
-    // State to store uploaded file
-    const [file, setFile] = useState("");
-
-    // progress
-    const [percent, setPercent] = useState(0);
-    const handleImageChange = (event) => {
-        setFile(event.target.files[0]);
-    }
-
-
+    const { id } = useParams();
+    
+    const [isAdd, setIsAdd] = useState(true);
+    const [imgEmployee, setImgEmployee] = useState();
     const [name, setName] = useState("");
     const [lastName, setLastName] = useState("");
     const [email, setEmail] = useState("");
@@ -39,21 +32,95 @@ const AddEmployee = () => {
     const [workShift, setWorkshift] = useState("");
     const [leaveHour, setLeave] = useState([]);
     const [skillsHour, setSkill] = useState([]);
-    const [lastId, setLastId] = useState();
-    
+    const [file, setFile] = useState("");
+    const [percent, setPercent] = useState(0);
+   const [nameField,setNameField] = useState("");
+   const [fields, setFields] = useState({
+    educationField: [],
+    courseField: [],
+    trainingField: [],
+    logField: []
+  });
+
+
     useEffect(() => {
-        get(child(dbRef, `lastKey`)).then((snapshot) => {
-            if (snapshot.exists()) {
-                var temp = snapshot.val();
-                setLastId(temp.lastId + 1);
-                debugger
-            } else {
-                console.log("No data available");
-            }
-        }).catch((error) => {
-            console.error(error);
+        onValue(child(dbRef, `users/${parseInt(id, 10)}`), (snapshot) => {
+            const data = snapshot.val().data;
+    
+            setName(data.name);
+            setLastName(data.lastName);
+            setEmail(data.email);
+            setContactNumber(data.contactNumber);
+            setAge(data.age);
+            setDob(data.dob);
+            setAddress(data.address);
+            setOccupation(data.job);
+            setDepartment(data.Department);
+            setSupervision(data.supervisor);
+            setWorkshift(data.workShip);
+            {
+                data?.skills.map((item) => {
+                    handleSkill(item.name, item.hours);
+                }
+
+                )
+
+            };
+
+            {
+                data?.leave.map((item) => {
+                    handleLeave(item.name, item.hours);
+                })
+            };
+            {
+                data?.Education.map((item) => {
+                    handleAddField("educationField");
+                    handleChange(item.id, item, "Edit", "educationField");
+                   
+                }
+
+                )
+            };
+            {
+                data?.Course.map((item) => {
+                    handleAddField("courseField");
+                    handleChange(item.id, item, "Edit", "courseField");
+                    
+                }
+
+                )
+            };
+            {
+                data?.Log.map((item) => {
+                    handleAddField("logField");
+                    handleChange(item.id, item, "Edit", "logField");
+                    
+                }
+
+                )
+            };
+            {
+                data?.Training.map((item) => {
+                    handleAddField("trainingField");
+                    handleChange(item.id, item, "Edit", "trainingField");
+                  
+                }
+
+                )
+            };
+           
+           
+
         });
-      }, []);
+       
+    }, []);
+   
+
+
+    const handleImageChange = (event) => {
+        setFile(event.target.files[0]);
+    }
+
     const handleLeave = (leave, hour) => {
         const arrLeave = {
             "name": leave,
@@ -64,186 +131,62 @@ const AddEmployee = () => {
     const handleSkill = (skill, hour) => {
         const arrSkill = {
             "name": skill,
-            "hours": hour.target.value
+            "hours": hour
         }
         setSkill((prevSkillHour) => [...prevSkillHour, arrSkill]);
 
     }
 
 
-    const [educationField, setEducation] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
-    const [courseField, setCourseField] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
-    const [trainingField, setTraining] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
-    const [logField, setLog] = useState([{ id: 1, name: "", specialization: "", date: "", uploadDocument: "" }]);
-    const [selectedImage, setSelectedImage] = useState(null);
-    const handleAddEducationField = () => {
-        const newId = educationField.length + 1;
-        setEducation([...educationField, { id: newId, value: "" }]);
-    };
 
-    const handleEducationChange = (index, event) => {
-
-        // const updatedFields = educationField.map((field) =>
-        //     field.id === id ? { ...field, value: newValue } : field
-        // );
-        // setEducation(updatedFields);
-        const { id } = event.target;
-        const field = id.split("-")[0]; // Extract the field name from the id
-
-        const updatedEducationField = [...educationField];
-        updatedEducationField[index] = {
-            ...updatedEducationField[index],
-            [field]: event.target.value,
+    const handleAddField = (fieldName) => {
+        const newId = fields[fieldName].length + 1;
+      
+        // Clone the existing array for the specified field and add a new item
+        const updatedField = [...fields[fieldName], { id: newId, name: "", specialization: "", date: "", uploadDocument: "" }];
+      
+        // Update the 'fields' object with the new array
+        setFields({
+          ...fields,
+          [fieldName]: updatedField,
+        });
+      };
+    
+      
+const handleChange = (index, event, status, fieldName) => {
+    const updatedField = fields[fieldName];
+  
+    if (status === "Add") {
+      const { id } = event.target;
+      const field = id.split("-")[0];
+      updatedField[index] = {
+        ...updatedField[index],
+        [field]: event.target.value,
+      };
+    } else {
+      Object.keys(event).forEach((key) => {
+        updatedField[index] = {
+          ...updatedField[index],
+          [key]: event[key],
         };
-
-        setEducation(updatedEducationField);
-    };
-    const handleAddCourseField = () => {
-        const newId = courseField.length + 1;
-        setCourseField([...educationField, { id: newId, value: "" }]);
-    };
-
-    const handleCourseChange = (index, event) => {
-        const { id } = event.target;
-        const field = id.split("-")[0]; // Extract the field name from the id
-
-        const updatedEducationField = [...courseField];
-        updatedEducationField[index] = {
-            ...updatedEducationField[index],
-            [field]: event.target.value,
-        };
-
-        setCourseField(updatedEducationField);
-    };
-    const handleAddTrainingField = () => {
-        const newId = trainingField.length + 1;
-        setTraining([...educationField, { id: newId, value: "" }]);
-    };
-
-    const handleTrainingChange = (index, event) => {
-        const { id } = event.target;
-        const field = id.split("-")[0]; // Extract the field name from the id
-
-        const updatedEducationField = [...trainingField];
-        updatedEducationField[index] = {
-            ...updatedEducationField[index],
-            [field]: event.target.value,
-        };
-
-        setTraining(updatedEducationField);
-    };
-    const handleAddLogField = () => {
-        const newId = logField.length + 1;
-        setLog([...educationField, { id: newId, value: "" }]);
-    };
-
-    const handleLogChange = (index, event) => {
-        const { id } = event.target;
-        const field = id.split("-")[0]; // Extract the field name from the id
-
-        const updatedEducationField = [...logField];
-        updatedEducationField[index] = {
-            ...updatedEducationField[index],
-            [field]: event.target.value,
-        };
-
-        setLog(updatedEducationField);
-    };
-
-
-
-
-
-    // const handleImageChange = (e) => {
-    //     const file = e.target.files[0];
-    //     if (file) {
-    //         const reader = new FileReader();
-    //         reader.onload = (e) => {
-    //             const imageBlob = new Blob([e.target.result], { type: file.type });
-    //             setSelectedImage(URL.createObjectURL(imageBlob));
-    //             // You can use the 'imageBlob' for further processing or uploading.
-    //         };
-    //         reader.readAsArrayBuffer(file);
-    //     }
-    // };
-
-
-
-
-    const updateEducationData = (index) => {
-        const newEducation = {};
-        const name = document.getElementById(`name-${index}`).value;
-        const specialization = document.getElementById(`specialization-${index}`).value;
-        const date = document.getElementById(`date-${index}`).value;
-        const uploadDocument = document.getElementById(`uploadDocument-${index}`).value;
-
-        newEducation.id = index;
-        newEducation.name = name;
-        newEducation.specialization = specialization;
-        newEducation.date = date;
-        newEducation.uploadDocument = uploadDocument;
-
-
-        setEducation([...educationField, newEducation]);
-
+      });
     }
-    const updateCourseData = (index) => {
-        const newCourse = {};
-        const name = document.getElementById(`name-${index}`).value;
-        const specialization = document.getElementById(`specialization-${index}`).value;
-        const date = document.getElementById(`date-${index}`).value;
-        const uploadDocument = document.getElementById(`uploadDocument-${index}`).value;
-
-        newCourse.id = index;
-        newCourse.name = name;
-        newCourse.specialization = specialization;
-        newCourse.date = date;
-        newCourse.uploadDocument = uploadDocument;
-
-        setCourseField([...courseField, newCourse]);
-
-    }
-    const updateTrainingData = (index) => {
-        const newTraining = {};
-        const name = document.getElementById(`name-${index}`).value;
-        const specialization = document.getElementById(`specialization-${index}`).value;
-        const date = document.getElementById(`date-${index}`).value;
-        const uploadDocument = document.getElementById(`uploadDocument-${index}`).value;
-
-        newTraining.id = index;
-        newTraining.name = name;
-        newTraining.specialization = specialization;
-        newTraining.date = date;
-        newTraining.uploadDocument = uploadDocument;
-
-        setTraining([...trainingField, newTraining]);
-
-    }
-    const updateLogData = (index) => {
-        const newLog = {};
-        const name = document.getElementById(`name-${index}`).value;
-        const specialization = document.getElementById(`specialization-${index}`).value;
-        const date = document.getElementById(`date-${index}`).value;
-        const uploadDocument = document.getElementById(`uploadDocument-${index}`).value;
-
-        newLog.id = index;
-        newLog.name = name;
-        newLog.specialization = specialization;
-        newLog.date = date;
-        newLog.uploadDocument = uploadDocument;
-
-        setLog([...logField, newLog]);
-
-    }
-
+  
+    setFields({
+      ...fields,
+      [fieldName]: updatedField,
+    });
+   
+  };
+    
     const handleSubmit = (event) => {
         event.preventDefault();
-       
+
 
 
         // Tạo đối tượng JSON dữ liệu theo định dạng bạn cung cấp
         const data = {
-            id: lastId,
+            id: id,
             name: name,
             lastName: lastName,
             email: email,
@@ -258,24 +201,18 @@ const AddEmployee = () => {
             workShip: workShift,
             leave: leaveHour,
             skills: skillsHour,
-            Education: educationField,
-            Course: courseField,
-            Training: trainingField,
-            Log: logField
+            Education: fields["educationField"],
+            Course: fields["courseField"],
+            Log: fields["logField"],
+            Training: fields["trainingField"]
+            
         };
-      
 
 
-        set(child(dbRef, `users/${data.id}`), {
+
+        update(child(dbRef, `users/${id}`), {
             data
         });
-        update(child(dbRef, `lastKey`), {
-         lastId
-        });
-
-        
-
-
         const storageRef = sRef(storage, `/files/${data?.id}`);
 
         // progress can be paused and resumed. It also exposes progress updates.
@@ -300,6 +237,7 @@ const AddEmployee = () => {
                 });
             }
         );
+
 
 
     }
@@ -432,7 +370,7 @@ const AddEmployee = () => {
                     </div>
                     <div class="flex flex-wrap -mx-3 mb-2">
                         {
-                            leave.map((item) => (
+                            leave.map((item, index) => (
                                 <div class="w-full md:w-1/4 px-3 mb-6 md:mb-0">
                                     <label class="block uppercase tracking-wide text-gray-700 text-xs font-bold mb-2" for="grid-city">
                                         {item}
@@ -440,7 +378,7 @@ const AddEmployee = () => {
                                     <input class="appearance-none block w-full bg-gray-200 text-gray-700 border border-gray-200 rounded py-3 px-4 leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-city" type="text"
                                         onChange={(e) => handleLeave(item, e.target.value)}
 
-                                        placeholder="Number" />
+                                        value={leaveHour[index]?.hours} />
                                 </div>
 
                             ))
@@ -449,11 +387,11 @@ const AddEmployee = () => {
                     </div>
                     <h3>Skills</h3>
                     <div id="skill-list" className="grid grid-cols-3 grid-rows-3 gap-2 ">
-                        {skills.map((item) => (
+                        {skills?.map((item, index) => (
 
                             <div class="relative">
                                 <p>{item}</p>
-                                <select onChange={(e) => handleSkill(item, e)} class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
+                                <select  value={skillsHour[index]?.hours} onChange={(e) => handleSkill(item, e)} class="block appearance-none w-full bg-gray-200 border border-gray-200 text-gray-700 py-3 px-4 pr-8 rounded leading-tight focus:outline-none focus:bg-white focus:border-gray-500" id="grid-state">
                                     <option>1</option>
                                     <option>2</option>
                                     <option>3</option>
@@ -471,7 +409,7 @@ const AddEmployee = () => {
 
                     </div>
                     <p className="text-center font-bold text-3xl">Education</p>
-                    {educationField.map((item, index) => (
+                    {fields["educationField"]?.map((item, index) => (
                         <div key={index}>
 
 
@@ -479,7 +417,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={(e) => handleEducationChange(index, e)}
+                                        value={item?.name}
+                                        onChange={(e) => handleChange(index, e, "Add", "educationField")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -487,7 +426,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={(e) => handleEducationChange(index, e)}
+                                        value={item?.specialization}
+                                        onChange={(e) => handleChange(index, e, "Add", "educationField")}
 
                                         required />
                                     <div className="underline"></div>
@@ -498,7 +438,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={(e) => handleEducationChange(index, e)}
+                                        value={item?.date}
+                                        onChange={(e) => handleChange(index, e, "Add", "educationField")}
 
                                         required />
                                     <div className="underline"></div>
@@ -507,7 +448,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={(e) => handleEducationChange(index, e)}
+                                        value={item?.uploadDocument}
+                                        onChange={(e) => handleChange(index, e, "Add", "educationField")}
 
                                         required />
                                     <div className="underline"></div>
@@ -520,10 +462,10 @@ const AddEmployee = () => {
 
                     ))}
 
-                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={handleAddEducationField} />
+                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={() => handleAddField("educationField")} />
 
                     <p className="text-center font-bold text-3xl">Course</p>
-                    {courseField.map((item, index) => (
+                    {fields["courseField"]?.map((item, index) => (
                         <div key={index}>
 
 
@@ -531,7 +473,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={(e) => handleCourseChange(index, e)}
+                                        value={item?.name}
+                                        onChange={(e) => handleChange(index, e, "Add", "courseField")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -539,7 +482,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={(e) => handleCourseChange(index, e)}
+                                        value={item?.specialization}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "courseField")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`specialization-${index}`}>Specialization</label>
@@ -549,7 +494,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={(e) => handleCourseChange(index, e)}
+                                        value={item?.date}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "courseField")}
 
                                         required />
                                     <div className="underline"></div>
@@ -558,7 +505,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={(e) => handleCourseChange(index, e)}
+                                        value={item?.uploadDocument}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "courseField")}
 
                                         required />
                                     <div className="underline"></div>
@@ -571,9 +520,9 @@ const AddEmployee = () => {
 
                     ))}
 
-                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={handleAddCourseField} />
+                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={() => handleAddField("courseField")} />
                     <p className="text-center font-bold text-3xl">Training</p>
-                    {trainingField.map((item, index) => (
+                    {fields["trainingField"]?.map((item, index) => (
                         <div key={index}>
 
 
@@ -581,15 +530,18 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={(e) => handleTrainingChange(index, e)}
+                                        value={item?.name}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "trainingField")}
                                         required />
                                     <div className="underline"></div>
-                                    <label for={`name-${index}`}>Name</label>
+                                    <label for={`name-${index}`}>Name {}</label>
                                 </div>
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={(e) => handleTrainingChange(index, e)}
+                                        value={item?.specialization}
+                                        onChange={(e) => handleChange(index, e, "Add", "trainingField")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`specialization-${index}`}>Specialization</label>
@@ -599,7 +551,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={(e) => handleTrainingChange(index, e)}
+                                        value={item?.date}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "trainingField")}
 
 
                                         required />
@@ -609,7 +563,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={(e) => handleTrainingChange(index, e)}
+                                        value={item?.uploadDocument}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "trainingField")}
 
 
                                         required />
@@ -622,9 +578,9 @@ const AddEmployee = () => {
                         </div>
 
                     ))}
-                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={handleAddTrainingField} />
+                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={() => handleAddField("trainingField")} />
                     <p className="text-center font-bold text-3xl">Log</p>
-                    {logField.map((item, index) => (
+                    {fields["logField"]?.map((item, index) => (
                         <div key={index}>
 
 
@@ -632,7 +588,8 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`name-${index}`}
-                                        onChange={(e) => handleLogChange(index, e)}
+                                        value={item?.name}
+                                        onChange={(e) => handleChange(index, e, "Add", "logField")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`name-${index}`}>Name</label>
@@ -640,8 +597,9 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`specialization-${index}`}
-                                        onChange={(e) => handleLogChange(index, e)}
+                                        value={item?.specialization}
 
+                                        onChange={(e) => handleChange(index, e, "Add", "logield")}
                                         required />
                                     <div className="underline"></div>
                                     <label for={`specialization-${index}`}>Specialization</label>
@@ -651,7 +609,10 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`date-${index}`}
-                                        onChange={(e) => handleLogChange(index, e)}
+                                        value={item?.date}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "logField")}
+
                                         required />
                                     <div className="underline"></div>
                                     <label for={`date-${index}`}>Date</label>
@@ -659,7 +620,10 @@ const AddEmployee = () => {
                                 <div className="input-data">
                                     <input type="text"
                                         id={`uploadDocument-${index}`}
-                                        onChange={(e) => handleLogChange(index, e)}
+                                        value={item?.uploadDocument}
+
+                                        onChange={(e) => handleChange(index, e, "Add", "logField")}
+
                                         required />
                                     <div className="underline"></div>
                                     <label for={`uploadDocument-${index}`}>Upload Document</label>
@@ -671,7 +635,7 @@ const AddEmployee = () => {
 
                     ))}
 
-                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={handleAddLogField} />
+                    <AiFillPlusCircle className="mx-auto mt-4" size={30} onClick={() => handleAddField("logField")} />
 
                     <div className="form-row ">
                         <div className="input-data textarea">
@@ -691,4 +655,4 @@ const AddEmployee = () => {
         </>
     );
 };
-export default AddEmployee;
+export default EditEmployee;

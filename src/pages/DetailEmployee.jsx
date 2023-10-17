@@ -1,29 +1,79 @@
 // src/components/AboutPage.js
 import React from 'react';
+import { Link } from 'react-router-dom';
 import { EmployeeBar } from '../components';
 import data from "../assets/mockdata.json";
-
+import {useState, useEffect} from 'react';
 import { BiCircle } from "react-icons/bi";
 import { FiEdit } from "react-icons/fi";
 import { useParams } from "react-router-dom";
+import { getDatabase, ref, onValue, get, child, set, orderByKey, limitToLast, query, update } from "firebase/database";
+import { getStorage, uploadBytes } from "firebase/storage";
+import { database, storage } from '../firebaseStore/firebase';
+import { uploadBytesResumable, getMetadata, getDownloadURL, ref as sRef, listAll } from "firebase/storage";
 
 
 
 const DetailEmployee = () => {
+  const dbRef = ref(database);
+
+
   const maxRating = 5; // Số điểm tối đa
 
 
-  const { id } = useParams();
 
 
-  const e = data.find((item) => item.id === parseInt(id, 10));
-  const renderSkillRating = (rating) => {
+ 
+  const  {id}  = useParams();
+  const [status, setStatus] = useState("top-charts");
+  const [info, setInfor] = useState();
+  const [imgEmployee, setImgEmployee] = useState();
+ // const [id, setID] =useState();
+
+
+  useEffect(() => {
+    // Thay đổi key khi component được mount lại hoặc focus
+
+    setStatus("status-" + new Date().getTime());
+    
+   
+  }, []);
+  useEffect(() => {
+    const fetchImage = async (id) => {
+      const imageRef = sRef(storage, `files/${id}`); // Tạo tham chiếu đến hình ảnh cụ thể
+      const url = await getDownloadURL(imageRef); // Lấy URL tải xuống hình ảnh
+      
+      return url;
+    }
+    
+    const loadImage = async () => {
+     // Thay thế 1 bằng ID của hình ảnh cụ thể bạn muốn hiển thị
+      const url = await fetchImage(parseInt(id, 10));
+      
+      setImgEmployee(url);
+    }
+    
+    loadImage();
+    }, [status,id]);
+  useEffect( () => {
+    onValue(child(dbRef, `users/${parseInt(id, 10)}`), (snapshot) => {
+      const data = snapshot.val().data;
+      debugger
+     setInfor(data);
+    });
+   
+
+  }, [status,id]);
+
+
+ // const e = data.find((item) => item.id === parseInt(id, 10));
+  const renderSkillRating = () => {
     return (
       <div className="grid grid-cols-3 grid-rows-3 gap-1 ">
 
-        {e.skills.map((skill, index) => (
+        {info?.skills.map((skill, index) => (
           <div key={index} className="flex flex-row items-center py-0.5 gap-1">
-            {skill.name}: {renderRatingStars(skill.rating)}
+            {skill.name}: {renderRatingStars(parseInt(skill.hours,10))}
           </div>
         ))}
       </div>
@@ -55,18 +105,18 @@ const DetailEmployee = () => {
       <div className='flex flex-col gap-4 min-h-screen'>
         <div className='flex flex-col gap-1'>
         <div className='md:hidden flex flex-row gap-1 justify-center'>
-            <p className='font-bold  text-4xl'>{e.name}</p>
-            <p className='font-bold text-4xl'>{e.lastName}</p>
+            <p className='font-bold  text-4xl'>{info?.name}</p>
+            <p className='font-bold text-4xl'>{info?.lastName}</p>
           </div>
-          <p className='md:hidden flex text-gray-500 justify-center'>{e.job}</p>
+          <p className='md:hidden flex text-gray-500 justify-center'>{info?.job}</p>
 
-          <img src={e.imageUrl} alt="avt" className='md:w-[260px] h-70 object-cover rounded-lg mb-2 w-screen'  />
+          <img src={imgEmployee} alt="avt" className='md:w-[260px] h-70 object-cover rounded-lg mb-2 w-screen'  />
           <div className='md:flex flex-row gap-1 hidden'>
-            <p className='font-bold'>{e.name}</p>
-            <p className='font-bold '>{e.lastName}</p>
+            <p className='font-bold'>{info?.name}</p>
+            <p className='font-bold '>{info?.lastName}</p>
           </div>
 
-          <p className='hidden md:flex text-gray-500'>{e.job}</p>
+          <p className='hidden md:flex text-gray-500'>{info?.job}</p>
         </div>
         <div className='flex flex-col'>
           <div className='grid grid-cols-[1fr,1fr,0.3fr] text-gray-500 text-xs'>
@@ -76,20 +126,20 @@ const DetailEmployee = () => {
 
           </div>
           <div className='grid grid-cols-[1fr,1fr,0.3fr]'>
-            <p>{e.dob}</p>
-            <p>{e.dob}</p>
-            <p>{e.age}</p>
+            <p>{info?.dob}</p>
+            <p>{info?.dob}</p>
+            <p>{info?.age}</p>
 
           </div>
           <div className="border border-gray-300 h-[0.5px] w-full mt-4"></div>
 
         </div>
         <div className='flex flex-col gap-4'>
-          {e.leave.map((item, index) => (
+          {info?.leave?.map((item, index) => (
             <div key={index} className="flex flex-row bg-white rounded-lg">
               <div className="h-full w-1 bg-orange-500 rounded-lg overflow-hidden"></div>
               <div className=" flex flex-row p-3 items-center">
-                <p className='text-orange-500 mr-4 text-3xl'>{item.hour}</p>
+                <p className='text-orange-500 mr-4 text-3xl'>{item.hours}</p>
                 <p> hours of {item.name} leave</p>
               </div>
             </div>
@@ -101,7 +151,12 @@ const DetailEmployee = () => {
       </div>
       <div className='border-none bg-white bg-cover flex-col flex flex-grow px-4  '>
         <div className="flex justify-end mt-2 mr-4">
-          <FiEdit size={30} />
+           <Link  to={`/edit-employee/${info?.id}`}>
+           <FiEdit size={30} 
+           className="cursor-pointer"
+           />
+          </Link>
+         
         </div>
         <div className="border border-gray-300 h-[0.5px] w-full mt-4"></div>
 
@@ -115,19 +170,19 @@ const DetailEmployee = () => {
                 <div className='grid grid-cols-2 grid-rows-2 overflow-hidden '>
                   <div className='flex flex-col  mb-[12px]'>
                     <p className=' text-gray-500 text-xs'>Skype</p>
-                    <p className='text-sm'>{e.name}</p>
+                    <p className='text-sm'>{info?.name}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Email</p>
-                    <p className='text-sm'>{e.email}</p>
+                    <p className='text-sm'>{info?.email}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Phone</p>
-                    <p className='text-sm'>{e.contactNumber}</p>
+                    <p className='text-sm'>{info?.contactNumber}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Home phone</p>
-                    <p className='text-sm'>{e.contactNumber}</p>
+                    <p className='text-sm'>{info?.contactNumber}</p>
                   </div>
                 </div>
 
@@ -140,27 +195,27 @@ const DetailEmployee = () => {
                 <div className='grid grid-cols-3 grid-rows-2 overflow-hidden space-between '>
                   <div className='flex flex-col  mb-[12px]'>
                     <p className=' text-gray-500 text-xs'>Personal number</p>
-                    <p className='text-sm'>{e.id}</p>
+                    <p className='text-sm'>{info?.id}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Department</p>
-                    <p className='text-sm'>{e.Department}</p>
+                    <p className='text-sm'>{info?.Department}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Position</p>
-                    <p className='text-sm'>{e.job}</p>
+                    <p className='text-sm'>{info?.job}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Work location</p>
-                    <p className='text-sm'>{e.location}</p>
+                    <p className='text-sm'>{info?.location}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Supervisor</p>
-                    <p className='text-sm'>{e.supervisor}</p>
+                    <p className='text-sm'>{info?.supervisor}</p>
                   </div>
                   <div>
                     <p className=' text-gray-500 text-xs'>Work shift</p>
-                    <p className='text-sm'>{e.workShip}</p>
+                    <p className='text-sm'>{info?.workShip}</p>
                   </div>
                 </div>
 
@@ -179,11 +234,11 @@ const DetailEmployee = () => {
 
         </div>
         <div className='grid grid-cols-[1fr,1fr]'>
-          <div className="p-4">
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
             <fieldset className="border border-gray-300 p-4 rounded-lg">
               <legend className="text-lg font-semibold">Education</legend>
-              {e.Education.map((item,index) => (
-                <div>
+              {info?.Education?.map((item,index) => (
+                <div >
                   <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
                     <div className='flex flex-col'>
                       <p className=' text-gray-500 text-xs'>Name</p>
@@ -204,7 +259,7 @@ const DetailEmployee = () => {
 
 
                   </div>
-                  {index !== e.Education.length - 1 && (
+                  {index !== info?.Education?.length - 1 && (
                   <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
 
       )}
@@ -215,10 +270,10 @@ const DetailEmployee = () => {
               ))}
             </fieldset>
           </div>
-          <div className="p-4">
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
             <fieldset className="border border-gray-300 p-4 rounded-lg">
               <legend className="text-lg font-semibold">Courses</legend>
-              {e.Course.map((item,index) => (
+              {info?.Course?.map((item,index) => (
                 <div>
                   <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
                     <div className='flex flex-col'>
@@ -240,7 +295,7 @@ const DetailEmployee = () => {
 
 
                   </div>
-                  {index !== e.Education.length - 1 && (
+                  {index !== info?.Course?.length - 1 && (
                   <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
 
       )}
@@ -251,6 +306,82 @@ const DetailEmployee = () => {
               ))}
             </fieldset>
           </div>
+          
+        </div>
+        <div className='grid grid-cols-[1fr,1fr]'>
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
+            <fieldset className="border border-gray-300 p-4 rounded-lg">
+              <legend className="text-lg font-semibold">Log</legend>
+              {info?.Log?.map((item,index) => (
+                <div className=' overflow-y-scroll h-[calc(100vh-85vh)]  hide-scrollbar '>
+                  <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
+                    <div className='flex flex-col'>
+                      <p className=' text-gray-500 text-xs'>Name</p>
+                      <p className='text-sm'>{item.name}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Specialization</p>
+                      <p className='text-sm'>{item.Specialization}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Date</p>
+                      <p className='text-sm'>{item.Date}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Upload Document</p>
+                      <p className='text-sm'>{item['Upload Document']}</p>
+                    </div>
+
+
+                  </div>
+                  {index !== info?.Log?.length - 1 && (
+                  <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
+
+      )}
+                </div>
+
+
+
+              ))}
+            </fieldset>
+          </div>
+          <div className="p-4   overflow-y-scroll h-[calc(100vh-62vh)]  hide-scrollbar ">
+            <fieldset className="border border-gray-300 p-4 rounded-lg">
+              <legend className="text-lg font-semibold">Training</legend>
+              {info?.Training?.map((item,index) => (
+                <div>
+                  <div className='grid grid-cols-2 grid-rows-2' key={item.id}>
+                    <div className='flex flex-col'>
+                      <p className=' text-gray-500 text-xs'>Name</p>
+                      <p className='text-sm'>{item.name}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Specialization</p>
+                      <p className='text-sm'>{item.Description}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Date</p>
+                      <p className='text-sm'>{item.Date}</p>
+                    </div>
+                    <div>
+                      <p className=' text-gray-500 text-xs'>Upload Document</p>
+                      <p className='text-sm'>{item['Upload Document']}</p>
+                    </div>
+
+
+                  </div>
+                  {index !== info?.Training?.length - 1 && (
+                  <div className="border border-gray-300 h-[0.5px] w-full mb-4"></div>
+
+      )}
+                </div>
+
+
+
+              ))}
+            </fieldset>
+          </div>
+          
         </div>
       </div>
 
